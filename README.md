@@ -318,7 +318,6 @@ SELECT * FROM belousov2262.patient_visit_stats LIMIT 3;
 ```sql
 CALL belousov2262.add_doctor('Новиков Иван Сергеевич', 'Хирург', 'Первая');
 CALL belousov2262.book_appointment(1, 2, '2024-02-01', '14:30:00');
-CALL belousov2262.get_doctor_schedule(1, '2024-01-19');
 ```
 
 ## Результаты выполнения
