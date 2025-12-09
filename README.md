@@ -314,6 +314,11 @@ SELECT * FROM belousov2262.patients_by_doctor WHERE doctor_id = 1 LIMIT 3;
 SELECT * FROM belousov2262.patient_visit_stats LIMIT 3;
 ```
 
+**Проверка процедур:**
+```sql
+CALL belousov2262.add_doctor('Новиков Иван Сергеевич', 'Хирург', 'Первая');
+CALL belousov2262.book_appointment(1, 2, '2024-02-01', '14:30:00');
+```
 
 ## Результаты выполнения
 
@@ -325,3 +330,8 @@ SELECT * FROM belousov2262.patient_visit_stats LIMIT 3;
 **Результат использования представления patient_visit_stats:**
 <img width="802" height="116" alt="image" src="https://github.com/user-attachments/assets/ae0f39d0-6a87-4471-8d69-9f4ea4313238" />
 
+**Результат использования процедуры add_doctor:**
+<img width="700" height="159" alt="image" src="https://github.com/user-attachments/assets/387f8f10-dedd-4cd7-bc3b-1f23933b0a8f" />
+
+**Результат использования процедуры book_appointment:**
+<img width="617" height="154" alt="image" src="https://github.com/user-attachments/assets/48daf3c8-c589-488a-8f05-f9be4558dd9e" />
