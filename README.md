@@ -183,3 +183,150 @@ ORDER BY p.full_name;
 
 <img width="437" height="393" alt="image" src="https://github.com/user-attachments/assets/080e5a90-0fcf-4a5d-9d45-0d46b3c9b56c" />
 
+# Лабораторная работа 3. Представления и процедуры
+
+## 1. Создание представлений для выходных документов
+
+**Представление 1:** Пациенты по врачам
+```sql
+CREATE OR REPLACE VIEW belousov2262.patients_by_doctor AS
+SELECT 
+    p.id,
+    p.full_name,
+    p.date_of_birth,
+    p.phone_number,
+    d.id as doctor_id,
+    d.full_name as doctor_name,
+    d.speciality,
+    v.date,
+    v.time_visit
+FROM belousov2262.patients p
+JOIN belousov2262.visits v ON p.id = v.patient_id
+JOIN belousov2262.doctors d ON v.doctor_id = d.id;
+```
+
+**Использование:**
+```sql
+SELECT id, full_name, date, time_visit
+FROM belousov2262.patients_by_doctor
+WHERE doctor_id = 1
+ORDER BY full_name;
+```
+**Результат использования:**
+<img width="547" height="189" alt="image" src="https://github.com/user-attachments/assets/fe219812-0514-4972-aafe-51fac1ef55d7" />
+
+
+**Представление 2:** Статистика посещений пациентов
+```sql
+CREATE OR REPLACE VIEW belousov2262.patient_visit_stats AS
+SELECT 
+    p.id,
+    p.full_name,
+    p.date_of_birth,
+    p.phone_number,
+    (SELECT COUNT(*) 
+     FROM belousov2262.visits v 
+     WHERE v.patient_id = p.id) as total_visits
+FROM belousov2262.patients p;
+```
+
+**Использование:**
+```sql
+SELECT id, full_name, total_visits
+FROM belousov2262.patient_visit_stats
+ORDER BY full_name;
+```
+**Результат использования:**
+<img width="409" height="392" alt="image" src="https://github.com/user-attachments/assets/bf601142-a3a5-4a2a-909d-dccdd3cb24d9" />
+
+
+
+## 2. Разработка хранимых процедур с параметрами
+
+**Процедура 1:** Добавление нового врача
+```sql
+CREATE OR REPLACE PROCEDURE belousov2262.add_doctor(
+    p_full_name VARCHAR,
+    p_speciality VARCHAR,
+    p_category VARCHAR
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO belousov2262.doctors (full_name, speciality, category)
+    VALUES (p_full_name, p_speciality, p_category);
+END;
+$$;
+```
+
+**Процедура 2:** Запись пациента на прием
+```sql
+CREATE OR REPLACE PROCEDURE belousov2262.book_appointment(
+    p_patient_id INT,
+    p_doctor_id INT,
+    p_date DATE,
+    p_time TIME
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO belousov2262.visits (patient_id, doctor_id, date, time_visit)
+    VALUES (p_patient_id, p_doctor_id, p_date, p_time);
+END;
+$$;
+```
+
+
+## 3. Представление сложных запросов при помощи представления
+
+**Сложное представление:** Полная статистика по врачам
+```sql
+CREATE OR REPLACE VIEW belousov2262.doctor_full_statistics AS
+SELECT 
+    d.id,
+    d.full_name,
+    d.speciality,
+    d.category,
+    (SELECT COUNT(*) 
+     FROM belousov2262.visits v 
+     WHERE v.doctor_id = d.id) as total_appointments
+FROM belousov2262.doctors d;
+```
+
+**Использование сложного представления:**
+```sql
+SELECT full_name, speciality, total_appointments
+FROM belousov2262.doctor_full_statistics
+ORDER BY total_appointments DESC;
+```
+**Результат использования:**
+<img width="539" height="338" alt="image" src="https://github.com/user-attachments/assets/5aa66752-afbe-413b-96be-bd1ffd66a9d4" />
+
+
+## Проверка работы
+
+**Проверка представлений:**
+```sql
+SELECT * FROM belousov2262.patients_by_doctor WHERE doctor_id = 1 LIMIT 3;
+SELECT * FROM belousov2262.patient_visit_stats LIMIT 3;
+```
+
+**Проверка процедур:**
+```sql
+CALL belousov2262.add_doctor('Новиков Иван Сергеевич', 'Хирург', 'Первая');
+CALL belousov2262.book_appointment(1, 2, '2024-02-01', '14:30:00');
+CALL belousov2262.get_doctor_schedule(1, '2024-01-19');
+```
+
+## Результаты выполнения
+
+**Результат использования представления patients_by_doctor:**
+<img width="1189" height="121" alt="image" src="https://github.com/user-attachments/assets/b2d18c1e-5c9a-4641-8639-49385d2bf498" />
+
+
+
+**Результат использования представления patient_visit_stats:**
+<img width="802" height="116" alt="image" src="https://github.com/user-attachments/assets/ae0f39d0-6a87-4471-8d69-9f4ea4313238" />
+
+
+**Результат использования doctor_full_statistics:**
