@@ -213,6 +213,7 @@ WHERE doctor_id = 1
 ORDER BY full_name;
 ```
 **Результат использования:**
+
 <img width="547" height="189" alt="image" src="https://github.com/user-attachments/assets/fe219812-0514-4972-aafe-51fac1ef55d7" />
 
 
@@ -237,6 +238,7 @@ FROM belousov2262.patient_visit_stats
 ORDER BY full_name;
 ```
 **Результат использования:**
+
 <img width="409" height="392" alt="image" src="https://github.com/user-attachments/assets/bf601142-a3a5-4a2a-909d-dccdd3cb24d9" />
 
 
@@ -300,6 +302,7 @@ FROM belousov2262.doctor_full_statistics
 ORDER BY total_appointments DESC;
 ```
 **Результат использования:**
+
 <img width="539" height="338" alt="image" src="https://github.com/user-attachments/assets/5aa66752-afbe-413b-96be-bd1ffd66a9d4" />
 
 
@@ -328,5 +331,3 @@ CALL belousov2262.get_doctor_schedule(1, '2024-01-19');
 **Результат использования представления patient_visit_stats:**
 <img width="802" height="116" alt="image" src="https://github.com/user-attachments/assets/ae0f39d0-6a87-4471-8d69-9f4ea4313238" />
 
-
-**Результат использования doctor_full_statistics:**
