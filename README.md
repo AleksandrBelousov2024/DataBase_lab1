@@ -190,7 +190,3 @@ ORDER BY p.full_name;
 | 4 | Попова Екатерина Викторовна | 1 |
 | 1 | Смирнов Алексей Иванович | 2 |
 
-**Создание дампа базы данных:**
-```bash
-pg_dump -n belousov2262 --inserts -U postgres -d medical_clinic > belousov2262_dump.sql
-```
