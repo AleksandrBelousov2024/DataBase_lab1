@@ -12,7 +12,7 @@
 
 ```mermaid
 erDiagram
-    ПАЦИЕНТЫ {
+    PATIENTS {
         int id PK "Идентификатор"
         varchar фамилия "Фамилия"
         varchar имя "Имя"
@@ -21,7 +21,7 @@ erDiagram
         varchar телефон "Контактный телефон"
     }
     
-    ВРАЧИ {
+    DOCTORS {
         int id PK "Идентификатор"
         varchar фамилия "Фамилия"
         varchar имя "Имя"
@@ -30,7 +30,7 @@ erDiagram
         varchar категория "Категория"
     }
     
-    ПРИЕМЫ {
+    VISITS {
         int id PK "Идентификатор"
         int пациент_id FK "ID пациента"
         int врач_id FK "ID врача"
