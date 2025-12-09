@@ -14,18 +14,14 @@
 erDiagram
     PATIENTS {
         int id PK "Идентификатор"
-        varchar фамилия "Фамилия"
-        varchar имя "Имя"
-        varchar отчество "Отчество"
+        varchar full_name "ФИО"
         date дата_рождения "Дата рождения"
         varchar телефон "Контактный телефон"
     }
     
     DOCTORS {
         int id PK "Идентификатор"
-        varchar фамилия "Фамилия"
-        varchar имя "Имя"
-        varchar отчество "Отчество"
+        varchar full_name "ФИО"
         varchar специальность "Специальность"
         varchar категория "Категория"
     }
