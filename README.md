@@ -15,23 +15,23 @@ erDiagram
     PATIENTS {
         int id PK "Идентификатор"
         varchar full_name "ФИО"
-        date дата_рождения "Дата рождения"
-        varchar телефон "Контактный телефон"
+        date date_of_birth "Дата рождения"
+        varchar phone_number "Контактный телефон"
     }
     
     DOCTORS {
         int id PK "Идентификатор"
         varchar full_name "ФИО"
-        varchar специальность "Специальность"
-        varchar категория "Категория"
+        varchar speciality "Специальность"
+        varchar category "Категория"
     }
     
     VISITS {
         int id PK "Идентификатор"
-        int пациент_id FK "ID пациента"
-        int врач_id FK "ID врача"
-        date дата_приема "Дата приема"
-        time время_приема "Время приема"
+        int patient_id FK "ID пациента"
+        int doctor_id FK "ID врача"
+        date date "Дата приема"
+        time time_visit "Время приема"
     }
 
     PATIENTS ||--o{ VISITS : "записывается"
