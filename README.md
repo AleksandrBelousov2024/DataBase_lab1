@@ -174,19 +174,11 @@ LEFT JOIN belousov2262.visits AS v ON v.patient_id = p.id
 GROUP BY p.id, p.full_name
 ORDER BY p.full_name;
 ```
-
 **Результат Запроса 1:**
-| id | full_name |
-|----|-----------|
-| 2 | Волкова Татьяна Петровна |
-| 1 | Смирнов Алексей Иванович |
-| 3 | Кузнецов Андрей Сергеевич |
+<img width="330" height="196" alt="image" src="https://github.com/user-attachments/assets/968ca56d-12d3-4c9e-836e-197dd5a2f47f" />
+
 
 **Результат Запроса 2:**
-| id | full_name | visits_count |
-|----|-----------|--------------|
-| 2 | Волкова Татьяна Петровна | 2 |
-| 3 | Кузнецов Андрей Сергеевич | 2 |
-| 4 | Попова Екатерина Викторовна | 1 |
-| 1 | Смирнов Алексей Иванович | 2 |
+<img width="437" height="393" alt="image" src="https://github.com/user-attachments/assets/080e5a90-0fcf-4a5d-9d45-0d46b3c9b56c" />
+
 
