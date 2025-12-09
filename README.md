@@ -36,3 +36,27 @@ erDiagram
 
     PATIENTS ||--o{ VISITS : "записывается"
     DOCTORS ||--o{ VISITS : "принимает"
+### Преобразование ER-диаграммы в логическую модель
+Сущности и атрибуты:
+PATIENTS (Пациенты):
+id: INTEGER (Первичный ключ)
+full_name: VARCHAR(40) (ФИО)
+date_of_birth: DATE (Дата рождения)
+phone_number: VARCHAR(50) (Контактный телефон)
+
+DOCTORS (Врачи):
+id: INTEGER (Первичный ключ)
+full_name: VARCHAR(40) (ФИО)
+speciality: VARCHAR(50) (Специальность)
+category: VARCHAR(50) (Категория)
+
+VISITS (Записи на прием):
+id: INTEGER (Первичный ключ)
+patient_id: INTEGER (Внешний ключ к PATIENTS.id)
+doctor_id: INTEGER (Внешний ключ к DOCTORS.id)
+date: DATE (Дата приема)
+time_visit: TIME (Время приема)
+
+Связи:
+Один пациент может иметь много записей (1:M)
+Один врач может иметь много записей (1:M)
