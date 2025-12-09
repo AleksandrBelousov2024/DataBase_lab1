@@ -314,11 +314,6 @@ SELECT * FROM belousov2262.patients_by_doctor WHERE doctor_id = 1 LIMIT 3;
 SELECT * FROM belousov2262.patient_visit_stats LIMIT 3;
 ```
 
-**Проверка процедур:**
-```sql
-CALL belousov2262.add_doctor('Новиков Иван Сергеевич', 'Хирург', 'Первая');
-CALL belousov2262.book_appointment(1, 2, '2024-02-01', '14:30:00');
-```
 
 ## Результаты выполнения
 
