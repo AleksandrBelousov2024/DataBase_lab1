@@ -1,4 +1,4 @@
-<img width="854" height="728" alt="image" src="https://github.com/user-attachments/assets/ca37b433-4e82-4515-9692-6b0cda45e4cd" /># Лабораторная работа 1. Проектирование структуры БД
+# Лабораторная работа 1. Проектирование структуры БД
 
 ## Выбор задачи
 
@@ -428,6 +428,7 @@ SELECT
 FROM belousov2262.visits;
 ```
 **Результат использования:**
+
 <img width="390" height="252" alt="image" src="https://github.com/user-attachments/assets/c11dd035-6fa2-4a13-ab92-627570a0d654" />
 
 
@@ -446,6 +447,7 @@ WHERE schemaname = 'belousov2262'
 ORDER BY tablename, indexname;
 ```
 **Результат использования:**
+
 <img width="694" height="490" alt="image" src="https://github.com/user-attachments/assets/c9dd6c8a-5f98-4a02-99b3-4846693f70ba" />
 
 
@@ -460,6 +462,7 @@ WHERE d.id = 100
 ORDER BY p.full_name;
 ```
 **Результат использования:**
+
 <img width="767" height="672" alt="image" src="https://github.com/user-attachments/assets/951afcfa-f646-4c9c-9aa6-6ec63d814469" />
 
 
@@ -474,6 +477,7 @@ ORDER BY p.full_name
 LIMIT 100;
 ```
 **Результат использования:**
+
 <img width="707" height="676" alt="image" src="https://github.com/user-attachments/assets/82f2ce36-cf4e-4156-85db-8324f4330fa0" />
 
 
@@ -494,6 +498,7 @@ ORDER BY total_visits DESC
 LIMIT 20;
 ```
 **Результат использования:**
+
 <img width="674" height="715" alt="image" src="https://github.com/user-attachments/assets/4c828cb6-f1eb-4fb0-8fbc-6f1cad1cccf6" />
 
 
@@ -612,6 +617,7 @@ WHERE d.id = 100
 ORDER BY p.full_name;
 ```
 **Результат использования:**
+
 <img width="840" height="748" alt="image" src="https://github.com/user-attachments/assets/9e330504-90bd-4d7f-b61c-d1dba591fe0c" />
 
 
@@ -627,6 +633,7 @@ WHERE d.id = 100
 ORDER BY p.full_name;
 ```
 **Результат использования:**
+
 <img width="852" height="746" alt="image" src="https://github.com/user-attachments/assets/8f90cbbc-e5a9-419a-996e-dc783415359a" />
 
 
@@ -641,6 +648,7 @@ GROUP BY p.id, p.full_name
 ORDER BY p.full_name;
 ```
 **Результат использования:**
+
 <img width="857" height="735" alt="image" src="https://github.com/user-attachments/assets/33224c05-aa8e-459e-baf8-d88df12863e4" />
 
 
@@ -655,6 +663,7 @@ GROUP BY p.id, p.full_name
 ORDER BY p.full_name;
 ```
 **Результат использования:**
+
 <img width="854" height="728" alt="image" src="https://github.com/user-attachments/assets/2ec847e5-4b5c-462f-9470-f9cc3d676e99" />
 
 
