@@ -736,3 +736,200 @@ DROP FUNCTION IF EXISTS belousov2262.generate_random_phone();
 DROP FUNCTION IF EXISTS belousov2262.record_performance_test(VARCHAR, VARCHAR, NUMERIC, NUMERIC, INTEGER, INTEGER);
 DROP TABLE IF EXISTS belousov2262.performance_results;
 ```
+
+# Лабораторная работа 5. Триггеры и аудит
+
+## Цель
+Реализация бизнес-логики на уровне БД и системы аудита.
+
+## Задачи
+1. Триггеры каскадного удаления для пациентов и их записей
+2. Триггеры аудита изменений (INSERT, UPDATE, DELETE) записей на прием
+3. Создание таблицы-журнала для отслеживания изменений записей
+
+## 1. Триггер каскадного удаления записей при удалении пациента
+
+### SQL
+```sql
+-- Функция для каскадного удаления записей пациента
+CREATE OR REPLACE FUNCTION delete_visits_cascade_function()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RAISE NOTICE 'Триггер запущен! Удаляем записи пациента %', OLD.id;
+    DELETE FROM belousov2262.visits WHERE patient_id = OLD.id;
+    RETURN OLD;
+END;
+$$;
+
+-- Создание триггера
+CREATE OR REPLACE TRIGGER delete_visits_cascade_trigger
+    BEFORE DELETE ON belousov2262.patients
+    FOR EACH ROW
+    EXECUTE FUNCTION delete_visits_cascade_function();
+```
+
+### Проверка
+```sql
+-- Пробуем удалить пациента с ID 1 (у него есть записи в таблице visits)
+DELETE FROM belousov2262.patients WHERE id = 1;
+```
+
+<img width="745" height="258" alt="image" src="https://github.com/user-attachments/assets/65ea4d2b-1b1a-4a41-80e8-58f342f4e5e4" />
+
+
+## 2. Триггер каскадного удаления записей при удалении врача
+
+```sql
+-- Функция для каскадного удаления записей врача
+CREATE OR REPLACE FUNCTION delete_doctor_visits_cascade_function()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RAISE NOTICE 'Триггер запущен! Удаляем записи врача %', OLD.id;
+    DELETE FROM belousov2262.visits WHERE doctor_id = OLD.id;
+    RETURN OLD;
+END;
+$$;
+
+-- Создание триггера
+CREATE OR REPLACE TRIGGER delete_doctor_visits_cascade_trigger
+    BEFORE DELETE ON belousov2262.doctors
+    FOR EACH ROW
+    EXECUTE FUNCTION delete_doctor_visits_cascade_function();
+```
+
+## 3. Создание таблицы аудита
+
+```sql
+-- Создаём таблицу аудита для записей на прием
+CREATE TABLE IF NOT EXISTS belousov2262.visits_audit(
+    audit_id SERIAL PRIMARY KEY,
+    operation CHAR(1) NOT NULL,  -- I=INSERT, U=UPDATE, D=DELETE
+    changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    changed_by TEXT DEFAULT CURRENT_USER,
+
+    visit_id INTEGER,
+    patient_id INTEGER,
+    doctor_id INTEGER,
+    visit_date DATE,
+    visit_time TIME
+);
+```
+
+## 4. Создание функции и триггера аудита
+
+```sql
+-- Функция для аудита изменений в таблице visits
+CREATE OR REPLACE FUNCTION visits_audit_function()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF (TG_OP = 'UPDATE') THEN
+        INSERT INTO belousov2262.visits_audit(operation, visit_id, patient_id, doctor_id, visit_date, visit_time)
+        VALUES ('U', NEW.id, NEW.patient_id, NEW.doctor_id, NEW.date, NEW.time_visit);
+        RETURN NEW;
+    ELSEIF (TG_OP = 'DELETE') THEN
+        INSERT INTO belousov2262.visits_audit(operation, visit_id, patient_id, doctor_id, visit_date, visit_time)
+        VALUES ('D', OLD.id, OLD.patient_id, OLD.doctor_id, OLD.date, OLD.time_visit);
+        RETURN OLD;
+    ELSEIF (TG_OP = 'INSERT') THEN
+        INSERT INTO belousov2262.visits_audit(operation, visit_id, patient_id, doctor_id, visit_date, visit_time)
+        VALUES ('I', NEW.id, NEW.patient_id, NEW.doctor_id, NEW.date, NEW.time_visit);
+        RETURN NEW;
+    END IF;
+END;
+$$;
+
+-- Создание триггера аудита
+CREATE OR REPLACE TRIGGER visits_audit_trigger
+    AFTER INSERT OR UPDATE OR DELETE ON belousov2262.visits
+    FOR EACH ROW
+    EXECUTE FUNCTION visits_audit_function();
+```
+
+## 5. Проверка триггеров аудита
+
+### Функция для генерации тестовых записей
+```sql
+-- Создаем функцию для генерации тестовых записей (аналог generate_grades)
+CREATE OR REPLACE PROCEDURE belousov2262.generate_test_visits(count INTEGER)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    i INTEGER;
+    rand_patient_id INTEGER;
+    rand_doctor_id INTEGER;
+    rand_date DATE;
+    rand_time TIME;
+BEGIN
+    FOR i IN 1..count LOOP
+        -- Выбираем случайного пациента
+        SELECT id INTO rand_patient_id 
+        FROM belousov2262.patients 
+        ORDER BY RANDOM() 
+        LIMIT 1;
+        
+        -- Выбираем случайного врача
+        SELECT id INTO rand_doctor_id 
+        FROM belousov2262.doctors 
+        ORDER BY RANDOM() 
+        LIMIT 1;
+        
+        -- Генерируем случайную дату (ближайший месяц)
+        rand_date := CURRENT_DATE + (FLOOR(RANDOM() * 30))::INTEGER;
+        
+        -- Генерируем случайное время (рабочие часы)
+        rand_time := TIME '08:00' + (FLOOR(RANDOM() * 600) * INTERVAL '1 minute');
+        
+        -- Вставляем запись
+        INSERT INTO belousov2262.visits (patient_id, doctor_id, date, time_visit)
+        VALUES (rand_patient_id, rand_doctor_id, rand_date, rand_time);
+    END LOOP;
+END;
+$$;
+```
+
+### Тестирование триггеров аудита
+```sql
+-- 1. Генерируем 10 тестовых записей
+CALL belousov2262.generate_test_visits(10);
+
+-- 2. Удаляем одну запись
+DELETE FROM belousov2262.visits 
+WHERE id IN (SELECT id FROM belousov2262.visits ORDER BY RANDOM() LIMIT 1);
+
+-- 3. Обновляем одну запись
+UPDATE belousov2262.visits 
+SET time_visit = '14:30:00' 
+WHERE id = (SELECT id FROM belousov2262.visits ORDER BY id DESC LIMIT 1);
+```
+
+### Проверка результатов аудита
+```sql
+-- Смотрим, что записалось в таблицу аудита
+SELECT * FROM belousov2262.visits_audit ORDER BY changed_at DESC;
+
+-- Группируем по операциям
+SELECT 
+    operation,
+    COUNT(*) as count,
+    MIN(changed_at) as first_operation,
+    MAX(changed_at) as last_operation
+FROM belousov2262.visits_audit 
+GROUP BY operation 
+ORDER BY operation;
+```
+
+<img width="635" height="513" alt="image" src="https://github.com/user-attachments/assets/39ef8e65-6e92-4e6a-91fa-c17a091b9875" />
+
+
+## 6. Очистка тестовых данных
+
+```sql
+-- Удаляем временную процедуру
+DROP PROCEDURE IF EXISTS belousov2262.generate_test_visits(INTEGER);
+```
