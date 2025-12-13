@@ -194,6 +194,14 @@ ORDER BY p.full_name;
 
 ## 1. Создание представлений для выходных документов
 
+### **Как Views оптимизируют запросы (уточнения):**
+
+**Представления (Views)** оптимизируют работу с БД несколькими способами:
+
+**1. Упрощение доступа к данным** - сложные запросы с JOIN скрыты за простым интерфейсом  
+**2. Единая точка правки** - изменение логики в одном месте  
+**3. План выполнения кэшируется** - ускоряет повторные обращения  
+
 **Представление 1:** Пациенты по врачам
 ```sql
 CREATE OR REPLACE VIEW belousov2262.patients_by_doctor AS
@@ -212,7 +220,7 @@ JOIN belousov2262.visits v ON p.id = v.patient_id
 JOIN belousov2262.doctors d ON v.doctor_id = d.id;
 ```
 
-**Использование:**
+**Использование (упрощенный доступ):**
 ```sql
 SELECT id, full_name, date, time_visit
 FROM belousov2262.patients_by_doctor
@@ -224,7 +232,8 @@ ORDER BY full_name;
 <img width="547" height="189" alt="image" src="https://github.com/user-attachments/assets/fe219812-0514-4972-aafe-51fac1ef55d7" />
 
 
-**Представление 2:** Статистика посещений пациентов
+**Представление 2:** Статистика посещений пациентов  
+*Оптимизация: агрегация скрыта в представлении*
 ```sql
 CREATE OR REPLACE VIEW belousov2262.patient_visit_stats AS
 SELECT 
@@ -238,7 +247,7 @@ SELECT
 FROM belousov2262.patients p;
 ```
 
-**Использование:**
+**Использование (быстрый доступ к статистике):**
 ```sql
 SELECT id, full_name, total_visits
 FROM belousov2262.patient_visit_stats
@@ -252,7 +261,8 @@ ORDER BY full_name;
 
 ## 2. Разработка хранимых процедур с параметрами
 
-**Процедура 1:** Добавление нового врача
+**Процедура 1:** Добавление нового врача  
+*Инкапсуляция бизнес-логики*
 ```sql
 CREATE OR REPLACE PROCEDURE belousov2262.add_doctor(
     p_full_name VARCHAR,
@@ -268,7 +278,8 @@ END;
 $$;
 ```
 
-**Процедура 2:** Запись пациента на прием
+**Процедура 2:** Запись пациента на прием  
+*Проверки можно добавить в будущем*
 ```sql
 CREATE OR REPLACE PROCEDURE belousov2262.book_appointment(
     p_patient_id INT,
@@ -288,7 +299,8 @@ $$;
 
 ## 3. Представление сложных запросов при помощи представления
 
-**Сложное представление:** Полная статистика по врачам
+**Сложное представление:** Полная статистика по врачам  
+*Объединение данных из нескольких таблиц*
 ```sql
 CREATE OR REPLACE VIEW belousov2262.doctor_full_statistics AS
 SELECT 
@@ -302,7 +314,7 @@ SELECT
 FROM belousov2262.doctors d;
 ```
 
-**Использование сложного представления:**
+**Использование сложного представления (анализ загрузки):**
 ```sql
 SELECT full_name, speciality, total_appointments
 FROM belousov2262.doctor_full_statistics
@@ -342,6 +354,7 @@ CALL belousov2262.book_appointment(1, 2, '2024-02-01', '14:30:00');
 
 **Результат использования процедуры book_appointment:**
 <img width="617" height="154" alt="image" src="https://github.com/user-attachments/assets/48daf3c8-c589-488a-8f05-f9be4558dd9e" />
+
 
 
 # Лабораторная работа 4. Анализ производительности
