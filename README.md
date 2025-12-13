@@ -94,6 +94,13 @@ CREATE TABLE IF NOT EXISTS belousov2262.visits(
     time_visit TIME
 );
 ```
+## раздел Tables
+
+<img width="266" height="121" alt="image" src="https://github.com/user-attachments/assets/d8b22f24-2db3-4759-aa76-24c193db9e90" />
+
+<img width="248" height="696" alt="image" src="https://github.com/user-attachments/assets/2343c574-f479-47d8-9709-6f64e628294e" />
+
+
 
 ## Заполнение таблиц данными
 
