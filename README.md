@@ -355,7 +355,7 @@ ORDER BY total_appointments DESC;
 ```
 **Результат использования:**
 
-<img width="539" height="338" alt="image" src="https://github.com/user-attachments/assets/5aa66752-afbe-413b-96be-bd1ffd66a9d4" />
+<img width="529" height="205" alt="image" src="https://github.com/user-attachments/assets/96728357-22ba-40b6-b89b-8ea41e5713b1" />
 
 
 ## Проверка работы
@@ -375,15 +375,21 @@ CALL belousov2262.book_appointment(1, 2, '2024-02-01', '14:30:00');
 ## Результаты выполнения
 
 **Результат использования представления patients_by_doctor:**
-<img width="1189" height="121" alt="image" src="https://github.com/user-attachments/assets/b2d18c1e-5c9a-4641-8639-49385d2bf498" />
+
+<img width="1191" height="187" alt="image" src="https://github.com/user-attachments/assets/a7d00c19-31ad-4afe-a989-fe05ae1f09a9" />
+
 
 
 
 **Результат использования представления patient_visit_stats:**
-<img width="802" height="116" alt="image" src="https://github.com/user-attachments/assets/ae0f39d0-6a87-4471-8d69-9f4ea4313238" />
+
+<img width="821" height="204" alt="image" src="https://github.com/user-attachments/assets/2a68b93b-5d57-4687-a6d8-40de504335de" />
+
 
 **Результат использования процедуры add_doctor:**
-<img width="700" height="159" alt="image" src="https://github.com/user-attachments/assets/387f8f10-dedd-4cd7-bc3b-1f23933b0a8f" />
+
+<img width="394" height="124" alt="image" src="https://github.com/user-attachments/assets/d71dd5f1-167e-4777-8311-21a385a729e6" />
+
 
 **Результат использования процедуры book_appointment:**
 <img width="617" height="154" alt="image" src="https://github.com/user-attachments/assets/48daf3c8-c589-488a-8f05-f9be4558dd9e" />
