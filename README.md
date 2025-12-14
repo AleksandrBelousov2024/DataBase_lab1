@@ -190,7 +190,7 @@ ORDER BY p.full_name;
 
 <img width="437" height="393" alt="image" src="https://github.com/user-attachments/assets/080e5a90-0fcf-4a5d-9d45-0d46b3c9b56c" />
 
-# Лабораторная работа 3. Представления и процедуры (Обновленная версия с проверками)
+# Лабораторная работа 3. Представления и процедуры
 
 ## 1. Создание представлений для выходных документов
 
@@ -228,8 +228,7 @@ WHERE doctor_id = 1
 ORDER BY full_name;
 ```
 **Результат использования:**
-
-<img width="547" height="189" alt="image" src="https://github.com/user-attachments/assets/fe219812-0514-4972-aafe-51fac1ef55d7" />
+<img width="551" height="205" alt="image" src="https://github.com/user-attachments/assets/d122094c-3fbb-41fc-ae03-167761cfb3dd" />
 
 
 **Представление 2:** Статистика посещений пациентов  
