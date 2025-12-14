@@ -228,6 +228,7 @@ WHERE doctor_id = 1
 ORDER BY full_name;
 ```
 **Результат использования:**
+
 <img width="551" height="205" alt="image" src="https://github.com/user-attachments/assets/d122094c-3fbb-41fc-ae03-167761cfb3dd" />
 
 
@@ -254,7 +255,8 @@ ORDER BY full_name;
 ```
 **Результат использования:**
 
-<img width="409" height="392" alt="image" src="https://github.com/user-attachments/assets/bf601142-a3a5-4a2a-909d-dccdd3cb24d9" />
+<img width="402" height="181" alt="image" src="https://github.com/user-attachments/assets/d2b29a7d-c8f5-4391-8555-6069627d8bf3" />
+
 
 
 
