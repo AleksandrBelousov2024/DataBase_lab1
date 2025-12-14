@@ -260,7 +260,7 @@ ORDER BY full_name;
 
 
 
-## 2. Разработка хранимых процедур с параметрами (С ПРОВЕРКАМИ)
+## 2. Разработка хранимых процедур с параметрами
 
 **Процедура 1:** Добавление нового врача с проверками  
 *Инкапсуляция бизнес-логики с валидацией*
@@ -398,26 +398,26 @@ CALL belousov2262.book_appointment(1, 2, '2024-02-01', '14:30:00');
 ```sql
 -- Ошибка: пустое ФИО
 -- CALL belousov2262.add_doctor('', 'Хирург', 'Первая');
-
+```
 <img width="913" height="358" alt="image" src="https://github.com/user-attachments/assets/e43c369a-a5c0-44de-8f45-68582ad2972d" />
 
-
+```sql
 -- Ошибка: недопустимая категория
 -- CALL belousov2262.add_doctor('Иванов', 'Терапевт', 'Неизвестная');
-
+```
 <img width="896" height="382" alt="image" src="https://github.com/user-attachments/assets/ccc71081-c737-433e-a91b-79e474f53cba" />
-
+```sql
 -- Ошибка: несуществующий пациент
 -- CALL belousov2262.book_appointment(999, 1, '2024-02-01', '10:00');
-
+```
 <img width="914" height="373" alt="image" src="https://github.com/user-attachments/assets/229ce31b-77fd-4b46-83cb-1a7ecc2b70a3" />
-
+```sql
 -- Ошибка: прошедшая дата
 -- CALL belousov2262.book_appointment(2, 1, '2023-01-01', '10:00');
-
+```
 <img width="1080" height="377" alt="image" src="https://github.com/user-attachments/assets/9743a57a-5015-48b7-8b33-438844021163" />
 
-```
+
 
 # Лабораторная работа 4. Анализ производительности
 
