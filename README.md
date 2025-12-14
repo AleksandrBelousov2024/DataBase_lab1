@@ -395,22 +395,28 @@ CALL belousov2262.book_appointment(1, 2, '2024-02-01', '14:30:00');
 <img width="617" height="154" alt="image" src="https://github.com/user-attachments/assets/48daf3c8-c589-488a-8f05-f9be4558dd9e" />
 
 **Тестирование проверок (ошибки):**
+
 ```sql
 -- Ошибка: пустое ФИО
 CALL belousov2262.add_doctor('', 'Хирург', 'Первая');
 ```
 <img width="913" height="358" alt="image" src="https://github.com/user-attachments/assets/e43c369a-a5c0-44de-8f45-68582ad2972d" />
 
+
 ```sql
 -- Ошибка: недопустимая категория
 CALL belousov2262.add_doctor('Иванов', 'Терапевт', 'Неизвестная');
 ```
 <img width="896" height="382" alt="image" src="https://github.com/user-attachments/assets/ccc71081-c737-433e-a91b-79e474f53cba" />
+
+
 ```sql
 -- Ошибка: несуществующий пациент
 CALL belousov2262.book_appointment(999, 1, '2024-02-01', '10:00');
 ```
 <img width="914" height="373" alt="image" src="https://github.com/user-attachments/assets/229ce31b-77fd-4b46-83cb-1a7ecc2b70a3" />
+
+
 ```sql
 -- Ошибка: прошедшая дата
 CALL belousov2262.book_appointment(2, 1, '2023-01-01', '10:00');
