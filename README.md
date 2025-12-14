@@ -190,7 +190,7 @@ ORDER BY p.full_name;
 
 <img width="437" height="393" alt="image" src="https://github.com/user-attachments/assets/080e5a90-0fcf-4a5d-9d45-0d46b3c9b56c" />
 
-# Лабораторная работа 3. Представления и процедуры
+# Лабораторная работа 3. Представления и процедуры (Обновленная версия с проверками)
 
 ## 1. Создание представлений для выходных документов
 
@@ -259,10 +259,10 @@ ORDER BY full_name;
 
 
 
-## 2. Разработка хранимых процедур с параметрами
+## 2. Разработка хранимых процедур с параметрами (С ПРОВЕРКАМИ)
 
-**Процедура 1:** Добавление нового врача  
-*Инкапсуляция бизнес-логики*
+**Процедура 1:** Добавление нового врача с проверками  
+*Инкапсуляция бизнес-логики с валидацией*
 ```sql
 CREATE OR REPLACE PROCEDURE belousov2262.add_doctor(
     p_full_name VARCHAR,
@@ -272,14 +272,27 @@ CREATE OR REPLACE PROCEDURE belousov2262.add_doctor(
 LANGUAGE plpgsql
 AS $$
 BEGIN
+    -- Простые проверки входных данных
+    IF p_full_name IS NULL OR p_full_name = '' THEN
+        RAISE EXCEPTION 'ФИО врача не может быть пустым';
+    END IF;
+    
+    IF p_speciality IS NULL OR p_speciality = '' THEN
+        RAISE EXCEPTION 'Специальность не может быть пустой';
+    END IF;
+    
+    -- Проверка допустимых категорий
+    IF p_category NOT IN ('Высшая', 'Первая', 'Вторая') THEN
+        RAISE EXCEPTION 'Категория должна быть: Высшая, Первая или Вторая';
+    END IF;
+    
     INSERT INTO belousov2262.doctors (full_name, speciality, category)
     VALUES (p_full_name, p_speciality, p_category);
 END;
 $$;
 ```
 
-**Процедура 2:** Запись пациента на прием  
-*Проверки можно добавить в будущем*
+**Процедура 2:** Запись пациента на прием с проверками
 ```sql
 CREATE OR REPLACE PROCEDURE belousov2262.book_appointment(
     p_patient_id INT,
@@ -289,7 +302,26 @@ CREATE OR REPLACE PROCEDURE belousov2262.book_appointment(
 )
 LANGUAGE plpgsql
 AS $$
+DECLARE
+    v_exists BOOLEAN;
 BEGIN
+    -- Проверка существования пациента
+    SELECT EXISTS(SELECT 1 FROM belousov2262.patients WHERE id = p_patient_id) INTO v_exists;
+    IF NOT v_exists THEN
+        RAISE EXCEPTION 'Пациент с ID % не найден', p_patient_id;
+    END IF;
+    
+    -- Проверка существования врача
+    SELECT EXISTS(SELECT 1 FROM belousov2262.doctors WHERE id = p_doctor_id) INTO v_exists;
+    IF NOT v_exists THEN
+        RAISE EXCEPTION 'Врач с ID % не найден', p_doctor_id;
+    END IF;
+    
+    -- Простая проверка даты
+    IF p_date < CURRENT_DATE THEN
+        RAISE EXCEPTION 'Нельзя записаться на прошедшую дату';
+    END IF;
+    
     INSERT INTO belousov2262.visits (patient_id, doctor_id, date, time_visit)
     VALUES (p_patient_id, p_doctor_id, p_date, p_time);
 END;
@@ -355,7 +387,20 @@ CALL belousov2262.book_appointment(1, 2, '2024-02-01', '14:30:00');
 **Результат использования процедуры book_appointment:**
 <img width="617" height="154" alt="image" src="https://github.com/user-attachments/assets/48daf3c8-c589-488a-8f05-f9be4558dd9e" />
 
+**Тестирование проверок (ошибки):**
+```sql
+-- Ошибка: пустое ФИО
+-- CALL belousov2262.add_doctor('', 'Хирург', 'Первая');
 
+-- Ошибка: недопустимая категория
+-- CALL belousov2262.add_doctor('Иванов', 'Терапевт', 'Неизвестная');
+
+-- Ошибка: несуществующий пациент
+-- CALL belousov2262.book_appointment(999, 1, '2024-02-01', '10:00');
+
+-- Ошибка: прошедшая дата
+-- CALL belousov2262.book_appointment(1, 1, '2023-01-01', '10:00');
+```
 
 # Лабораторная работа 4. Анализ производительности
 
